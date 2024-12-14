@@ -1,0 +1,2 @@
+PROJECT_NAME = "SMARTSHOPPING"
+ADMIN_SITE_NAME = "Smartshopping Admin"
