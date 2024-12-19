@@ -9,7 +9,7 @@ SoftUni Django Project
 #### Admin - in a dashboard the admins can control: 1) users, 2)products, 3) collections, 4) orders/purchases, etc.
 #### User/Product/Staff/Order control
 
-Admin:
+##### Admin:
 email: admin@gmail.com
 p-w: admin
 
