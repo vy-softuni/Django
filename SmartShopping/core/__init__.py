@@ -1,2 +1,2 @@
-PROJECT_NAME = "SMARTSHOPPING"
-ADMIN_SITE_NAME = "Smartshopping Admin"
+PROJECT_NAME = "SmartShopping"
+ADMIN_SITE_NAME = "SmartShopping Admin"

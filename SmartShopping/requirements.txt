@@ -1,0 +1,5 @@
+crispy-bootstrap5==2024.2
+Django==5.0.7
+pillow==10.4.0
+currencies==2020.12.12
+django-image-uploader-widget==0.5.0

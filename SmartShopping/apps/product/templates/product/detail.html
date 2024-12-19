@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="{{object.image.url}}" alt="{{object.name}}" /></div>
+            <div class="col-md-6">
+                <div class="small mb-1">SKU: {{object.sku}}</div>
+                <h1 class="display-5 fw-bolder">{{object.name}}</h1>
+                <div class="fs-5 mb-5">
+                    {% if object.discount %}
+                        <span class="text-decoration-line-through text-muted">{{object.get_price}}</span>
+                    {% endif %}
+                    <span class="ms-2 fw-600">{{object.total_price}}</span>
+                </div>
+                <p class="lead">{{object.description}}</p>
+                <div class="d-flex">
+                    {% if object.pk in item_ids %}
+                        <div class="text-center">
+                            <a href="{% url 'order:cart' %}" class="btn btn-outline-dark">View Cart</a>
+                        </div>
+                    {% else %}
+                        <form method="post" action="{% url 'order:add_to_cart' %}" class="d-flex">
+                            <input type="hidden" name="product" value="{{object.pk}}">
+                            {% csrf_token %}
+                            <input class="form-control text-center me-3" type="number" name="quantity" value="1" style="max-width: 4rem" min="1" max="10">
+                            <button type="submit" class="btn btn-outline-dark mt-auto">Add to cart</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-light">
+    <div class="container px-4 px-lg-5 mt-5">
+        <h2 class="fw-bolder mb-4">Related products</h2>
+        <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            {% for product in related_products %}
+                {% include 'card.html' with object=product %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
