@@ -21,6 +21,7 @@ urlpatterns = [
         views.OrderItemQuantityUpdateView.as_view(),
         name='update_cart'
     ),
+    path('add-promo/', views.AddPromoCodeView.as_view(), name='add_promo'),
     path('address/', views.BillingAddressView.as_view(), name='address'),
     path('orders/', views.OrderListView.as_view(), name='orders'),
     path('order/<int:pk>/', views.OrderDetailView.as_view(), name='detail'),

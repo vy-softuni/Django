@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.conf import settings
 
+from currencies import Currency
 
 from apps.models import TimestampedModel
 
@@ -16,6 +17,15 @@ class CustomerAddress(TimestampedModel):
     postcode = models.CharField(max_length=100)
     phone = models.CharField(max_length=100)
 
+
+class PromoCode(TimestampedModel):
+    code = models.CharField(max_length=100, unique=True)
+    discount = models.IntegerField()
+    active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = "Promo code"
+        verbose_name_plural = "Promo codes"
 
 
 class Order(TimestampedModel):
@@ -62,7 +72,29 @@ class Order(TimestampedModel):
 
     @property
     def total_price(self):
-        return 
+        return Currency(settings.DEFAULT_CURRENCY).get_money_format(
+            self.get_total_price_after_discount()
+        )
+
+    def get_total_price_after_discount(self):
+        total_price = self.get_total_price()
+        if self.promo_code:
+            total_price -= self.promo_code.discount
+        return total_price
+
+    @property
+    def get_subtotal(self):
+        return Currency(settings.DEFAULT_CURRENCY).get_money_format(
+            self.get_total_price()
+        )
+
+    @property
+    def coupon_discount(self):
+        price = 0
+        if self.promo_code:
+            price = self.promo_code.discount
+        return Currency(settings.DEFAULT_CURRENCY).get_money_format(price)
+
 
 class OrderItem(TimestampedModel):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)

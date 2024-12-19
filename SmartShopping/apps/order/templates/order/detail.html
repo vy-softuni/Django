@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load order static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/tracking-process.css' %}" />
+{% endblock %}
+{% block content %}
+  <div class="container my-5 container px-4 px-lg-5">
+    <h1 class="fs-3 mb-4">Order Details</h1>
+
+    <div class="card p-4 border-bottom-0 rounded-0">
+      <div class="d-flex justify-content-between align-items-center">
+        <div>
+          <h1 class="fs-4 mb-0">Order #<strong>{{ object.id }}</strong></h1>
+          <p class="fs-5 mb-0">Placed on: {{ object.created }}</p>
+        </div>
+        <div>
+          <h2 class="fs-3 mb-0">Total: <strong>{{ object.total_price }}</strong></h2>
+        </div>
+      </div>
+    </div>
+
+    <div class="card px-4 border-bottom-0 mx-0 rounded-0">
+      <div class="table-responsive">
+        <table class="table mb-4">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in object.orderitem_set.all %}
+              <tr>
+                <td>
+                  <a class="text-decoration-none" href="{% url 'product:detail' item.product.pk %}">
+                    <div class="d-flex align-items-center">
+                      {% if item.product.image.url %}
+                        <img src="{{ item.product.image.url }}" height="50" alt="">
+                      {% else %}
+                        <i class="bi bi-image fs-1"></i>
+                      {% endif %}
+                      <div class="ms-2">
+                        <span class="text-dark">{{ item.product.name }}</span>
+                      </div>
+                    </div>
+                  </a>
+                </td>
+                <td class="text-right font-weight-semibold align-middle p-4">
+                  {{ item.product.total_price }}
+                </td>
+                <td class="align-middle p-4">
+                  {{ item.quantity }}
+                </td>
+                <td class="text-right font-weight-semibold align-middle p-4">
+                  {{ item.product|item_total:item.quantity }}
+                </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card px-4 border-bottom-0 mx-0 rounded-0">
+      <div class="row py-3">
+        <div class="col-md-6">
+          <h5>Shipping Address</h5>
+          <p class="mb-0">{{ object.orderaddress.address }}</p>
+          <p class="mb-0">
+            {{ object.orderaddress.city }}, {{ object.orderaddress.postcode }}
+          </p>
+          <p class="mb-0">{{ object.orderaddress.phone }}</p>
+        </div>
+        <div class="col-md-6">
+          <h5>Total Summary</h5>
+          <div class="d-flex justify-content-between">
+            Subtotal : <span>{{ object.get_subtotal }}</span>
+          </div>
+          <div class="d-flex justify-content-between">
+            Discounts : <span>{{ object.coupon_discount }}</span>
+          </div>
+          <div class="d-flex justify-content-between border-top border-2">
+            Total : <span>{{ object.total_price }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+        <div id="tracking">
+          <div class="tracking-list">
+            {% include 'order/tracking/item.html' with title="Order Placed" state=2 object=object %}
+            {% if object.status == 6 %}
+              {% include 'order/tracking/item.html' with title="CENCELLED" state=6 object=object %}
+            {% else %}
+              {% include 'order/tracking/item.html' with title="PROCESSED" state=3 object=object %}
+              {% include 'order/tracking/item.html' with title="SHIPPED" state=4 object=object %}
+              {% include 'order/tracking/item.html' with title="DELIVERED" state=5 object=object %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}{% endblock %}

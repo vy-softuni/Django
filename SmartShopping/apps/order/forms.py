@@ -42,4 +42,3 @@ class OrderBillingAddress(forms.ModelForm):
             self.user.last_name = self.cleaned_data['last_name']
         self.user.save()
         return billing_address
-

@@ -5,6 +5,7 @@ from currencies import Currency
 
 register = template.Library()
 
+
 @register.filter
 def item_total(product, quantity):
     price = product.price - product.discount

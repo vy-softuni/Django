@@ -1,6 +1,7 @@
 from core import PROJECT_NAME
 from apps.product.models import ProductCollection, Category
 
+
 def context(request):
     context = {
         "collections": ProductCollection.objects.filter(active=True),

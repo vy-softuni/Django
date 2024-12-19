@@ -1,0 +1,41 @@
+{% extends "base.html" %} {% load order static %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/tracking-process.css' %}" />
+{% endblock %} {% block content %}
+<div class="container my-5 container px-4 px-lg-5">
+  <h1 class="fs-3 mb-4">Recent Orders</h1>
+  <div class="responsive-table">
+    <table class="table table-hover table-striped border">
+        <thead>
+            <tr>
+                <th scope="col">Order #</th>
+                <th scope="col">Placed On</th>
+                <th scope="col">items</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Status</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+            <tr>
+                <td><span class="ps-2"># {{ order.id }}</span></td>
+                <td>{{ order.created }}</td>
+                <td>{{ order.orderitem_set.count }}</td>
+                <td>{{ order.total_price }}</td>
+                <td>{{ order.get_status_display }}</td>
+                <td>
+                  <a href="{% url 'order:detail' order.id %}" class="text-decoration-none">
+                    <i class="bi bi-eye-fill text-dark"></i>
+                  </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center">No Orders Found.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %} {% block js %}{% endblock %}

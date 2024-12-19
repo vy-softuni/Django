@@ -10,6 +10,7 @@ admin.site.site_header = ADMIN_SITE_NAME
 admin.site.site_title = ADMIN_SITE_NAME
 admin.site.index_title = ADMIN_SITE_NAME
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.urls')),

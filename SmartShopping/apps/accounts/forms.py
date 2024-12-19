@@ -48,4 +48,3 @@ class ProfileForm(forms.ModelForm):
         address.address = self.cleaned_data['address']
         address.save()
         return user
-

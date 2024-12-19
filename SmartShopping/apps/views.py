@@ -2,6 +2,7 @@ from django.views.generic import TemplateView
 
 from apps.product.models import ProductCollection
 
+
 class HomeView(TemplateView):
     template_name = 'index.html'
     extra_context = {'title': "Home", "home": True}

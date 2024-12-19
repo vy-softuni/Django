@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags order %}
+
+{% block content %}
+    <div class="container my-5 container px-4 px-lg-5">
+        <div class="row">
+            <div class="card border-0 col-8">
+                <div class="card-body">
+                    <h1 class="fs-3 mb-4">Billing address</h1>
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button class="btn col-12 fs-6 btn-dark px-5 py-2 mt-3" type="submit">
+                            Confirm Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="card border-0 col-4">
+                <div class="card-body">
+                    <h1 class="fs-3 mb-4">Cart items</h1>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="p-2 px-3 text-uppercase">Product</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">QTY</div>
+                                    </th>
+                                    <th scope="col" class="border-0 bg-light">
+                                        <div class="py-2 text-uppercase">Price</div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in request.user.cart.orderitem_set.all %}
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="p-2">
+                                                <img src="{{ item.product.image.url }}" alt="" width="40" class="img-fluid rounded shadow-sm">
+                                                <div class="ml-3 d-inline-block align-middle">
+                                                    <h5 class="mb-0">
+                                                        <a href="{% url 'product:detail' item.product.pk %}" class="text-dark d-inline-block align-middle">{{ item.name|truncatechars:15 }}</a>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="align-middle">{{ item.quantity }}</td>
+                                        <td class="align-middle"><strong>{{ item.product|item_total:item.quantity }}</strong></td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="2">Subtotal :</td>
+                                    <td class="align-middle"><strong>{{ request.user.cart.get_subtotal }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Discount :</td>
+                                    <td class="align-middle"><strong>{{ request.user.cart.coupon_discount }}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">Total :</td>
+                                    <td class="align-middle"><strong>{{ request.user.cart.total_price }}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
