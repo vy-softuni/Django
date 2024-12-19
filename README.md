@@ -13,3 +13,9 @@ SoftUni Django Project
 email: admin@gmail.com
 p-w: admin
 
+##### Demonstration: 
+at defense with database updates (more: products, users, etc.)
+
+##### Run:  
+python manage.py runserver   
+
