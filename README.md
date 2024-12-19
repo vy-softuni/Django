@@ -17,5 +17,9 @@ p-w: admin
 at defense with database updates (more: products, users, etc.)
 
 ##### Run:  
-python manage.py runserver   
+python manage.py runserver  
+
+#### Admin panel:
+
+http://127.0.0.1:8000/admin/ 
 
